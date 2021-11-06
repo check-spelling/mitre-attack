@@ -4,7 +4,6 @@ from mitre_attack.data.matrices.enterprise import MitreAttackEnterprise
 import mitre_attack.cli.click as click
 import logging
 import flask
-import sys
 
 
 logger = logging.getLogger(__name__)
@@ -21,17 +20,13 @@ def tactics():
 
 @app.route('/techniques')
 def techniques():
-    technique_ids = flask.request.args.getlist('technique_ids')
-    technique_names = flask.request.args.getlist('technique_names')
-    limit = int(flask.request.args.get('limit', 0)) or None
-
-    response = list(api.iter_techniques(technique_ids=technique_ids, technique_names=technique_names, limit=limit))
-    return flask.jsonify(len(response))
+    response = list(api.iter_techniques())
+    return flask.jsonify(response)
 
 
 @app.route('/groups')
 def groups():
-    response = list(api.iter_groups(limit=limit))
+    response = list(api.iter_groups())
     return flask.jsonify(response)
 
 
@@ -50,6 +45,12 @@ def malware():
 @app.route('/tools')
 def tools():
     response = list(api.iter_tools())
+    return flask.jsonify(response)
+
+
+@app.route('/mitigations')
+def mitigations():
+    response = list(api.iter_mitigations())
     return flask.jsonify(response)
 
 
